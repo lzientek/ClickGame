@@ -37,9 +37,6 @@
     <Compile Include="routes\index.js" />
     <Compile Include="bin\www" />
     <Compile Include="Socket.js" />
-    <None Include="click-game.pubxml" />
-    <Content Include="click-game.pubxml.user" />
-    <None Include="clickgameftp.pubxml" />
     <Content Include="package.json" />
     <Content Include="public\stylesheets\style.css" />
     <Content Include="README.md" />
