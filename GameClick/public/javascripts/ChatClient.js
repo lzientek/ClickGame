@@ -1,5 +1,5 @@
 ﻿
-var socket = io.connect('http://' + window.location.hostname + ':8081');
+var socket = io.connect();
 var canvas, context;
 var circleSize = 20;
 //receive messsage
