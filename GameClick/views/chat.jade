@@ -1,0 +1,31 @@
+﻿extends layout
+
+block content
+	.col-md-6
+		canvas#game(width="500", height="300").
+			You need a more recent navigator!
+	.col-md-2
+		h4= "Scores"
+		ul#userList
+			if users
+				each usr in users
+					li(id="name_"+usr)
+						span= usr+" "
+						span.score= "0"
+	.col-md-4
+		if pseudo
+			input#HiddenName(type="hidden",value=pseudo)
+			h4.
+				Welcome in the chat #{pseudo}
+
+		div#msgContainer
+			if messages
+				each msg in messages
+					div.message
+						h5= msg.Name
+						p= msg.Text
+						p= msg.PostingDate
+		form#msgForm
+			input#sendMsgText
+			button#sendMsgButton(type="button")= "Send"
+			

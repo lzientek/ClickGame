@@ -1,0 +1,29 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+a {
+  color: #00b7ff;
+}
+
+.message {
+        margin-top: 18px;
+    padding-top: 5px;
+    border-top: solid 1px #CCC;
+}
+
+#msgContainer {
+    height: 400px;
+    overflow-x: auto;
+
+}
+    #msgContainer h4 {
+        margin: 0;
+        padding: 0;
+    }
+.connect {
+    color: blueviolet;
+}
+#game {
+    border: #cccccc 1px solid;
+}
