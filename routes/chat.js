@@ -2,22 +2,30 @@
 var router = express.Router();
 var socket = require('../Socket');
 
-
-/* GET home page. */
 router.post('/', function (req, res) {
-    if (req.body.nom) { //on recupère le nom
+    var error;
+    if (!req.body.nom) { //on recupère le nom
+        error = "Chosisser un Pseudo...";
+    }
+    var users = socket.getUsers();
+    if (!error && users.indexOf(req.body.nom) >= 0) {
+        error = "Le pseudo \""+req.body.nom + "\" est deja utilisé, choisissez s'en un autre.";
+    }
+    if (!error) {
         res.render('chat', {
-            title: 'Chat',
+            title: 'Jeu',
             pseudo: req.body.nom,
             messages: socket.getLastMessages(),
-            users:socket.getUsers()
+            users: users
         });
     } else {
-        res.render('index', { error: "choose a name", title: "Index" });
+        
+        res.render('index', { error:error, title: "Index" });
     }
+    
+    
 });
 
-/* GET home page. */
 router.post('/ajax', function (req, res) {
     if (req.body.nom) { //on recupère le nom
         socket.emitMessage({ Name : req.body.nom, Text: req.body.message , PostingDate: new Date() });

@@ -1,12 +1,16 @@
 ﻿extends layout
 
 block content
-	h1= title
-	p Welcome to #{title}
-	if error
-		p(style="color:red;")=error
-	form(method="post",action="/chat")
-		label.
-			Enter your name :
-		input(type="text",name="nom",placeholder="name")
-		input(type="submit",value="Go in chat")
+	h1.col-md-offset-2= "Bienvenue sur Click Game"
+	.col-md-8.col-md-offset-2
+		p.
+			Bienvenue sur Click Game, un jeu en ligne temps réel pour jouer avec vos amis ou des inconnus. Ce jeu a été créé en une semaine dans le cadre de la conférence donné par <a href="http://microsoft.com">Microsoft</a> sur Azure le Mercredi 2 Decembre au seins de l'école <a href="http://supinfo.com">Supinfo</a>. <br /><br /> Pour commencer a jouer il vous suffit d'entrer un nom d'utilisateur et de cliquer sur les point qui vont aparetre. Vous pouvez de meme utiliser le chat pour discuter avec les autres participants. <strong>Bon jeu!!</strong>
+	
+	.col-md-8.col-md-offset-2(style="margin-top:19px;")
+		if error
+			p(style="color:red;")=error
+		form(method="post",action="/chat")
+			label.col-md-3=	"Entrer dans le jeu :"
+			.col-md-3
+				input.form-control(type="text",name="nom",placeholder="Pseudo")
+			input.btn.btn-primary(type="submit",value="Jouer!")

@@ -1,22 +1,21 @@
 ﻿extends layout
 
 block content
-	.col-md-6
+	.col-md-6.bg-game
+		h4= "Jeu"
 		canvas#game(width="500", height="300").
 			You need a more recent navigator!
-	.col-md-2
+	.col-md-2.block-score
 		h4= "Scores"
 		ul#userList
 			if users
 				each usr in users
-					li(id="name_"+usr)
-						span= usr+" "
+					li(id="name_"+usr)= usr
 						span.score= "0"
-	.col-md-4
+	.col-md-4.block-chat
 		if pseudo
 			input#HiddenName(type="hidden",value=pseudo)
-			h4.
-				Welcome in the chat #{pseudo}
+			h4= "Chat"
 
 		div#msgContainer
 			if messages
@@ -26,6 +25,8 @@ block content
 						p= msg.Text
 						p= msg.PostingDate
 		form#msgForm
-			input#sendMsgText
-			button#sendMsgButton(type="button")= "Send"
+			.input-group
+				input.form-control#sendMsgText
+				span.jesaisplaus
+					button.btn.btn-default#sendMsgButton(type="button")= "Envoyer"
 			
