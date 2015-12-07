@@ -38,6 +38,7 @@
     <Compile Include="bin\www" />
     <Compile Include="Socket.js" />
     <Content Include="package.json" />
+    <Content Include="public\stylesheets\back.jpg" />
     <Content Include="public\stylesheets\style.css" />
     <Content Include="README.md" />
     <Content Include="views\chat.jade" />

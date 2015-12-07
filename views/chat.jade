@@ -1,32 +1,33 @@
 ﻿extends layout
 
 block content
-	.col-md-6.bg-game
-		h4= "Jeu"
-		canvas#game(width="500", height="300").
-			You need a more recent navigator!
-	.col-md-2.block-score
-		h4= "Scores"
-		ul#userList
-			if users
-				each usr in users
-					li(id="name_"+usr)= usr
-						span.score= "0"
-	.col-md-4.block-chat
-		if pseudo
-			input#HiddenName(type="hidden",value=pseudo)
-			h4= "Chat"
+	.flat-back.game-back
+		.col-md-6
+			h4= "Jeu"
+			canvas#game(width="500", height="300").
+				You need a more recent navigator!
+		.col-md-2.block-score
+			h4= "Scores"
+			ul#userList
+				if users
+					each usr in users
+						li(id="name_"+usr)= usr
+							span.score= "0"
+		.col-md-4.block-chat
+			if pseudo
+				input#HiddenName(type="hidden",value=pseudo)
+				h4= "Chat"
 
-		div#msgContainer
-			if messages
-				each msg in messages
-					div.message
-						h5= msg.Name
-						p= msg.Text
-						p= msg.PostingDate
-		form#msgForm
-			.input-group
-				input.form-control#sendMsgText
-				span.input-group-btn
-					button.btn.btn-primary#sendMsgButton(type="button")= "Envoyer"
+			div#msgContainer
+				if messages
+					each msg in messages
+						div.message
+							h5= msg.Name
+							p= msg.Text
+							p= msg.PostingDate
+			form#msgForm
+				.input-group
+					input.form-control#sendMsgText
+					span.input-group-btn
+						button.btn.btn-primary#sendMsgButton(type="button")= "Envoyer"
 			
