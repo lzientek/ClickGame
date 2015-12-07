@@ -1,6 +1,6 @@
-﻿
+﻿var lastClickPosition = {};
 var socket = io.connect();
-var canvas, context;
+var canvas, context, pointTab = [];
 var circleSize = 20;
 //receive messsage
 socket.on('message', function (message) {
@@ -27,7 +27,16 @@ socket.on('addScore', function (value) {
 
 //clear a circle
 function clearCircle(point) {
-    context.clearRect(point.X - (circleSize +10), point.Y - (circleSize + 10), (circleSize + 10) * 2, (circleSize + 10) * 2);
+    context.clearRect(point.X - (circleSize + 10), point.Y - (circleSize + 10), (circleSize + 10) * 2, (circleSize + 10) * 2);
+}
+
+
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    };
 }
 
 //display a circle
@@ -64,6 +73,12 @@ socket.on('point', function (point) {
             clearInterval(myAnim);
             clearCircle(point);
         }
+        if (lastClickPosition.x && (point.X - circleSize) < lastClickPosition.x && (point.Y - circleSize) < lastClickPosition.y 
+            && (point.X + circleSize) > lastClickPosition.x && (point.Y + circleSize) > lastClickPosition.y) {
+            clearInterval(myAnim);
+            clearCircle(point);
+            lastClickPosition.x = 0;
+        }
     }, 1000 / 30);
 });
 
@@ -91,5 +106,10 @@ $(function () {
     //convas programming
     canvas = document.getElementById("game");
     context = canvas.getContext('2d');
-
+    canvas.addEventListener('click', function (evt) {
+        lastClickPosition = getMousePos(canvas, evt);
+        setTimeout(function() {
+            lastClickPosition.x = 0;
+        }, 150);
+    }, false);
 });

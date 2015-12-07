@@ -9,7 +9,7 @@ router.post('/', function (req, res) {
     }
     var users = socket.getUsers();
     if (!error && users.indexOf(req.body.nom) >= 0) {
-        error = "Le pseudo \""+req.body.nom + "\" est deja utilisé, choisissez s'en un autre.";
+        error = "Le pseudo \"" + req.body.nom + "\" est deja utilisé, choisissez s'en un autre.";
     }
     if (!error) {
         res.render('chat', {
@@ -19,11 +19,8 @@ router.post('/', function (req, res) {
             users: users
         });
     } else {
-        
-        res.render('index', { error:error, title: "Index" });
+        res.render('index', { error: error, title: "Index" });
     }
-    
-    
 });
 
 router.post('/ajax', function (req, res) {
