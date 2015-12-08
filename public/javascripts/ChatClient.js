@@ -78,6 +78,9 @@ socket.on('point', function (point) {
             clearInterval(myAnim);
             clearCircle(point);
             lastClickPosition.x = 0;
+            socket.emit("makePoints", Math.round((101 - point.Time) * 100 / i));
+            $("#game").addClass("green-border");
+
         }
     }, 1000 / 30);
 });
@@ -107,9 +110,15 @@ $(function () {
     canvas = document.getElementById("game");
     context = canvas.getContext('2d');
     canvas.addEventListener('click', function (evt) {
+        $("#game").removeClass("red-border");
+        $("#game").removeClass("green-border");
         lastClickPosition = getMousePos(canvas, evt);
-        setTimeout(function() {
-            lastClickPosition.x = 0;
+        setTimeout(function () {
+            if (lastClickPosition.x !== 0) {
+                socket.emit("makePoints", -20);
+                $("#game").addClass("red-border");
+                lastClickPosition.x = 0;
+            }
         }, 150);
     }, false);
 });

@@ -80,7 +80,7 @@ GLOBAL.sio.sockets.on('connection', function (socket, value) {
             socketHelper.addUser(data);
             socketHelper.emitConnect(data, "connected");
             socket.on("makePoints", function (score) {
-                socketHelper.sendScore(data, score);
+                socketHelper.emitScore(data, score);
             });
             socket.on("disconnect", function () {
                 socketHelper.removeUser(data);

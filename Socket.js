@@ -24,7 +24,7 @@ var _sendRandomPoint = function () {
     emitPoint({
         X: (Math.random() * 460) + 20,
         Y: (Math.random() * 260) + 20,
-        Time : (Math.random() * 75) + 15
+        Time : (Math.random() * 85) + 15
     });
     if (GLOBAL.sio.isStartPoint) {
         GLOBAL.sio.intervalPoint = setTimeout(_sendRandomPoint, (Math.random() * 1000 * 5) + 3);
@@ -88,7 +88,7 @@ var removePoint = function (id) {
         GLOBAL.sio.sockets.emit("removePoint", id);
     }
 }
-var sendScore = function (usrName, score) {
+var emitScore = function (usrName, score) {
     if (GLOBAL.sio && GLOBAL.sio.sockets) {
         GLOBAL.sio.sockets.emit("addScore", { Name: usrName, Score: score });
     }
@@ -103,6 +103,6 @@ var emitConnect = function (name, type) {
 module.exports = {
     emitMessage: emitMessage, emitConnect: emitConnect,
     removePoint: removePoint, startEmitPoints: startEmitPoints,
-    stopEmitPoints: stopEmitPoints, sendScore: sendScore, getLastMessages: getLastMessages,
+    stopEmitPoints: stopEmitPoints, emitScore: emitScore, getLastMessages: getLastMessages,
     removeUser: removeUser, addUser: addUser, getUsers: getUsers
 };

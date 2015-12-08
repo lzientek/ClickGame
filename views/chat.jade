@@ -11,7 +11,7 @@ block content
 			ul#userList
 				if users
 					each usr in users
-						li(id="name_"+usr)= usr
+						li(id="name_"+usr)= usr+" "
 							span.score= "0"
 		.col-md-4.block-chat
 			if pseudo
