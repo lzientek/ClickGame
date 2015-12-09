@@ -44,7 +44,7 @@ var stopEmitPoints = function () {
 }
 
 var emitPoint = function (point) {
-    if (GLOBAL.sio && GLOBAL.sio.sockets) {
+    if (GLOBAL.sio && GLOBAL.sio.sockets && GLOBAL.sio.isStartPoint) {
         if (!GLOBAL.sio.countPoints) {
             GLOBAL.sio.countPoints = 0;
         }
@@ -94,15 +94,38 @@ var emitScore = function (usrName, score) {
     }
 }
 var emitConnect = function (name, type) {
-    
     if (GLOBAL.sio && GLOBAL.sio.sockets) {
         GLOBAL.sio.sockets.emit("connectMsg", { Name: name, Type: type });
     }
-
 }
+var startGame = function () {
+    if (GLOBAL.sio && GLOBAL.sio.sockets) {
+        GLOBAL.sio.sockets.emit("startGame", 30);
+        
+        emitScore("all", 0);
+        
+        startEmitPoints();
+        setTimeout(function () {
+            stopGame();
+        }, 30 * 1000);
+    }
+}
+
+var stopGame = function () {
+    if (GLOBAL.sio && GLOBAL.sio.sockets) {
+        stopEmitPoints();
+        GLOBAL.sio.sockets.emit("stopGame", 10);
+        setTimeout(function () {
+            startGame();
+        }, 10 * 1000);
+    }
+}
+
+
 module.exports = {
     emitMessage: emitMessage, emitConnect: emitConnect,
     removePoint: removePoint, startEmitPoints: startEmitPoints,
     stopEmitPoints: stopEmitPoints, emitScore: emitScore, getLastMessages: getLastMessages,
-    removeUser: removeUser, addUser: addUser, getUsers: getUsers
+    removeUser: removeUser, addUser: addUser, getUsers: getUsers, stopGame: stopGame,
+    startGame : startGame
 };

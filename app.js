@@ -76,7 +76,6 @@ GLOBAL.sio.sockets.on('connection', function (socket, value) {
     socket.on('connectMsg', function (data) { // only on connection in the chat with name
         if (data != null) {
             nbUsers++;
-            socketHelper.startEmitPoints();
             socketHelper.addUser(data);
             socketHelper.emitConnect(data, "connected");
             socket.on("makePoints", function (score) {
@@ -85,12 +84,11 @@ GLOBAL.sio.sockets.on('connection', function (socket, value) {
             socket.on("disconnect", function () {
                 socketHelper.removeUser(data);
                 nbUsers--;
-                if (nbUsers === 0) {
-                    socketHelper.stopEmitPoints();
-                }
                 socketHelper.emitConnect(data, "disconnected");
             });
         }
     });
 });
+socketHelper.startGame();
+
 module.exports = app;

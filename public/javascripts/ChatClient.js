@@ -1,8 +1,8 @@
 ﻿var lastClickPosition = {};
 var socket = io.connect();
 var canvas, context, pointTab = [];
-var colorArrayPrimary = ["#2980b9","#27ae60","#8e44ad","#f1c40f","#c0392b","#d35400"];
-var colorArraySecondary = ["#3498db","#2ecc71","#9b59b6","#f39c12","#e74c3c","#e67e22"];
+var colorArrayPrimary = ["#2980b9", "#27ae60", "#8e44ad", "#f39c12", "#c0392b", "#d35400"];
+var colorArraySecondary = ["#3498db", "#2ecc71", "#9b59b6", "#f1c40f", "#e74c3c", "#e67e22"];
 var circleSize = 20;
 //receive messsage
 socket.on('message', function (message) {
@@ -21,10 +21,60 @@ socket.on('connectMsg', function (value) {
     }
 });
 
+function displayWinner() {
+    var winnerName = "",winnerScore =0;
+    $(".score").each(function (parameters) {
+        
+        var score = parseInt($(this).text());
+        if (score > winnerScore) {
+            winnerScore = score;
+            winnerName = $(this).parent().prop("id").replace("name_", "");
+        }
+    });
+    var textToDisplay = "Wait...";
+    if (winnerName == $("#HiddenName").val()) {
+        //display you win
+        textToDisplay = "You win! ( " + winnerScore + " points)";
+    } else if(winnerName != "") {
+         textToDisplay = winnerName+" win! ( " + winnerScore + " points)";
+    }
+    context.fillStyle = '#2980b9';
+    context.font = 'bold 40px lato';
+    context.textBaseline = 'bottom';
+    context.fillText(textToDisplay, 100, 100);
+}
+
+
+var timerInterval;
+//start
+socket.on('startGame', function (value) {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    clearInterval(timerInterval);
+    timerInterval = setInterval(function () {
+        value--;
+        $("#timerText").text(value + " seconde restant! Cliquez!!!");
+    }, 1000);
+    
+});
+
+//stop
+socket.on('stopGame', function (value) {
+    clearInterval(timerInterval);
+    displayWinner();
+    timerInterval = setInterval(function () {
+        value--;
+        $("#timerText").text(value + " secondes avant la prochaine partie!");
+    }, 1000);
+});
+
 //receive score update for a user
 socket.on('addScore', function (value) {
-    var actualScore = parseInt($("#name_" + value.Name).find(".score").text());
-    $("#name_" + value.Name).find(".score").text(actualScore + value.Score);
+    if (value.Name == "all") {
+        $(".score").text("0");
+    } else {
+        var actualScore = parseInt($("#name_" + value.Name).find(".score").text());
+        $("#name_" + value.Name).find(".score").text(actualScore + value.Score);
+    }
 });
 
 //clear a circle
@@ -42,8 +92,8 @@ function getMousePos(canvas, evt) {
 }
 
 //display a circle
-function displayCircle(point,color) {
-    context.fillStyle = color;//todo:random color
+function displayCircle(point, colorIndex) {
+    context.fillStyle = colorArrayPrimary[colorIndex];
     context.beginPath();
     context.arc(point.X, point.Y, circleSize, 0, Math.PI * 2);
     context.fill();
@@ -51,16 +101,16 @@ function displayCircle(point,color) {
 }
 
 socket.on('point', function (point) {
-    var rand = Math.round(Math.random()* colorArrayPrimary.length);
-    displayCircle(point);
+    var rand = Math.round(Math.random() * colorArrayPrimary.length);
+    displayCircle(point, rand);
     var flow = 1;
     var flowDir = +1;
     var i = 1;
     var myAnim = setInterval(function () {
         clearCircle(point);
-        displayCircle(point);
+        displayCircle(point, rand);
         context.beginPath();
-        context.strokeStyle = "#ff1212";
+        context.strokeStyle = colorArraySecondary[rand];
         var angle = Math.PI * 2 * (i / point.Time);
         context.arc(point.X, point.Y, circleSize + flow / 2, angle, Math.PI * 2);
         i++;

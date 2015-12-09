@@ -79,13 +79,16 @@ h4 {
     0% {
         border-color: white;
     }
+
     10% {
         border-color: #c0392b;
     }
+
     100% {
         border-color: white;
     }
 }
+
 .green-border {
     animation: animationFrames1 ease-in 1s;
     animation-iteration-count: 1;
@@ -95,9 +98,11 @@ h4 {
     0% {
         border-color: white;
     }
+
     10% {
         border-color: #2ecc71;
     }
+
     100% {
         border-color: white;
     }
@@ -112,9 +117,11 @@ h4 {
     0% {
         color: white;
     }
+
     10% {
         color: #2ecc71;
     }
+
     100% {
         color: white;
     }
@@ -129,9 +136,11 @@ h4 {
     0% {
         color: white;
     }
+
     10% {
         color: #c0392b;
     }
+
     100% {
         color: white;
     }
@@ -143,4 +152,9 @@ h4 {
     color: transparent;
     text-align: center;
     padding-right: 97px;
+}
+
+#timerText {
+    text-align: center;
+    font-size: 27px;
 }
