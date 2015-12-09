@@ -102,3 +102,45 @@ h4 {
         border-color: white;
     }
 }
+
+.green-color {
+    animation: animationFrames2 ease-in 1s;
+    animation-iteration-count: 1;
+}
+
+@keyframes animationFrames2 {
+    0% {
+        color: white;
+    }
+    10% {
+        color: #2ecc71;
+    }
+    100% {
+        color: white;
+    }
+}
+
+.red-color {
+    animation: animationFrames3 ease-in 1s;
+    animation-iteration-count: 1;
+}
+
+@keyframes animationFrames3 {
+    0% {
+        color: white;
+    }
+    10% {
+        color: #c0392b;
+    }
+    100% {
+        color: white;
+    }
+}
+
+#score-board {
+    font-weight: 900;
+    font-size: 36px;
+    color: transparent;
+    text-align: center;
+    padding-right: 97px;
+}

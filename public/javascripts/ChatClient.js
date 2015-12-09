@@ -1,6 +1,8 @@
 ﻿var lastClickPosition = {};
 var socket = io.connect();
 var canvas, context, pointTab = [];
+var colorArrayPrimary = ["#2980b9","#27ae60","#8e44ad","#f1c40f","#c0392b","#d35400"];
+var colorArraySecondary = ["#3498db","#2ecc71","#9b59b6","#f39c12","#e74c3c","#e67e22"];
 var circleSize = 20;
 //receive messsage
 socket.on('message', function (message) {
@@ -40,8 +42,8 @@ function getMousePos(canvas, evt) {
 }
 
 //display a circle
-function displayCircle(point) {
-    context.fillStyle = "#ff0000";//todo:random color
+function displayCircle(point,color) {
+    context.fillStyle = color;//todo:random color
     context.beginPath();
     context.arc(point.X, point.Y, circleSize, 0, Math.PI * 2);
     context.fill();
@@ -49,6 +51,7 @@ function displayCircle(point) {
 }
 
 socket.on('point', function (point) {
+    var rand = Math.round(Math.random()* colorArrayPrimary.length);
     displayCircle(point);
     var flow = 1;
     var flowDir = +1;
@@ -78,9 +81,11 @@ socket.on('point', function (point) {
             clearInterval(myAnim);
             clearCircle(point);
             lastClickPosition.x = 0;
-            socket.emit("makePoints", Math.round((101 - point.Time) * 100 / i));
+            var scr = Math.round((101 - point.Time) * 100 / i);
+            socket.emit("makePoints", scr);
+            $("#score-board").text(scr);
+            $("#score-board").addClass("green-color");
             $("#game").addClass("green-border");
-
         }
     }, 1000 / 30);
 });
@@ -112,11 +117,16 @@ $(function () {
     canvas.addEventListener('click', function (evt) {
         $("#game").removeClass("red-border");
         $("#game").removeClass("green-border");
+        $("#score-board").removeClass("green-color");
+        $("#score-board").removeClass("red-color");
         lastClickPosition = getMousePos(canvas, evt);
         setTimeout(function () {
             if (lastClickPosition.x !== 0) {
-                socket.emit("makePoints", -20);
+                var scr = -50;
+                socket.emit("makePoints", scr);
                 $("#game").addClass("red-border");
+                $("#score-board").text(scr);
+                $("#score-board").addClass("red-color");
                 lastClickPosition.x = 0;
             }
         }, 150);
