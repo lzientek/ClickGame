@@ -25,7 +25,7 @@ function drawString(ctx, text, posX, posY, textColor, font, fontSize) {
 
 //receive messsage
 socket.on('message', function (message) {
-    var result = '<div class="message" ><h4>' + message.Name + '</h4><p>' + message.Text + '</p><p>' + message.PostingDate + '</p></div>';
+    var result = '<div class="message" ><h4>' + message.Name + '</h4><p>' + message.Text + '</p></div>';
     $("#msgContainer").append(result);
     $("#msgContainer").scrollTop($("#msgContainer")[0].scrollHeight);
 });
@@ -98,7 +98,7 @@ socket.on('stopGame', function (value) {
 
 //receive score update for a user
 socket.on('addScore', function (value) {
-    if (value.Name == "all") {
+    if (value.Name === "all") {
         $(".score").text("0");
     } else {
         var actualScore = parseInt($("#name_" + value.Name).find(".score").text());
@@ -130,8 +130,8 @@ function displayCircle(point, colorIndex) {
 }
 
 socket.on('point', function (point) {
-    var rand = Math.round(Math.random() * colorArrayPrimary.length);
-    displayCircle(point, rand);
+    point.rand = Math.round(Math.random() * colorArrayPrimary.length);
+    displayCircle(point, point.rand);
     var flow = 1;
     var flowDir = +1;
     var i = 1;
@@ -141,9 +141,9 @@ socket.on('point', function (point) {
             return;
         }
         clearCircle(point);
-        displayCircle(point, rand);
+        displayCircle(point, point.rand);
         context.beginPath();
-        context.strokeStyle = colorArraySecondary[rand];
+        context.strokeStyle = colorArraySecondary[point.rand];
         var angle = Math.PI * 2 * (i / point.Time);
         context.arc(point.X, point.Y, circleSize + flow / 2, angle, Math.PI * 2);
         i++;
@@ -175,7 +175,9 @@ socket.on('point', function (point) {
 
 function sendMessageChat() {
     var text = $("#sendMsgText").val();
-    $.post("/chat/ajax", { nom: $("#HiddenName").val(), message: text });
+    if (text !== "" && text !== " ") {
+        $.post("/chat/ajax", { nom: $("#HiddenName").val(), message: text });
+    }
     $("#sendMsgText").val("");
 }
 

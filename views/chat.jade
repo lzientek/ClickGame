@@ -10,12 +10,15 @@ block content
 				You need a more recent navigator!
 			.col-md-12
 				#score-board
+			.col-md-12
+				button.btn.btn-sm.btn-primary(type="button",data-toggle="modal",data-target="#helper").
+					Comment jouer?
 		.col-md-2.block-score
 			h4= "Scores"
 			ul#userList
 				if users
 					each usr in users
-						li(id="name_"+usr)= usr+" "
+						li(id="name_"+usr)= usr
 							span.score= "0"
 		.col-md-4.block-chat
 			if pseudo
@@ -26,12 +29,27 @@ block content
 				if messages
 					each msg in messages
 						div.message
-							h5= msg.Name
+							h4= msg.Name
 							p= msg.Text
-							p= msg.PostingDate
 			form#msgForm
 				.input-group
 					input.form-control#sendMsgText
 					span.input-group-btn
-						button.btn.btn-primary#sendMsgButton(type="button")= "Envoyer"
+						button.btn.btn-success#sendMsgButton(type="button")= "Envoyer"
+
+		#helper.modal.fade(tabindex="-1", role="dialog",aria-labelledby="myModalLabel")
+			.modal-dialog
+				.modal-content
+					.modal-header
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Comment jouer</h4>
+					.modal-body
+						<p>Pour jouer il suffit seulement de cliquer sur les bules pendant la periode de temps (60 secondes). Pour gagner il faut être le plus rapide et ne pas cliquer à coter (-50 points). Pour discuter avec les autres participants un chat est à votre disposition.</p>
+						<p><strong>Bon Jeu!</strong></p>
+						<p></p>
+						<p>Ce jeu est en temps réel les points s'affiche au meme momment au meme endroit chez tout les participants.</p>
+						<p></p>
+						<p><span class="small">Dévellopé grace à Node.JS, socket.io, Express.js et Bootstrap par <a href="http://lucas.zientek.fr">Lucas ZIENTEK</a>.</span></p>
+
+
 			

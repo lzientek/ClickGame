@@ -20,14 +20,35 @@ var getLastMessages = function () {
     }
     return [];
 }
+
+var _isnotonpoint = function (point) {
+    if (!GLOBAL.sio.points) {
+        return true;
+    }
+    
+    for (var i = 0; i < GLOBAL.sio.points.length; i++) {
+        var pts = GLOBAL.sio.points[i];
+        if (pts.X - 27 < point.X && pts.Y - 27 < point.Y && pts.X + 27 > point.X && pts.Y + 27 > point.Y) {
+            return false;
+        }
+    }
+    return true;
+}
+
 var _sendRandomPoint = function () {
-    emitPoint({
-        X: (Math.random() * 460) + 20,
-        Y: (Math.random() * 260) + 20,
-        Time : (Math.random() * 85) + 15
-    });
+    var point;
+    do {
+        point = {
+            X: (Math.random() * 460) + 20,
+            Y: (Math.random() * 260) + 20,
+            Time: (Math.random() * 77) + 23
+        };
+    } while (!_isnotonpoint(point))
+    
+    
+    emitPoint(point);
     if (GLOBAL.sio.isStartPoint) {
-        GLOBAL.sio.intervalPoint = setTimeout(_sendRandomPoint, (Math.random() * 1000 * 5) + 3);
+        GLOBAL.sio.intervalPoint = setTimeout(_sendRandomPoint, (Math.random() * 1000 * 3));
     }
 };
 
@@ -48,7 +69,13 @@ var emitPoint = function (point) {
         if (!GLOBAL.sio.countPoints) {
             GLOBAL.sio.countPoints = 0;
         }
-        
+        if (!GLOBAL.sio.points) {
+            GLOBAL.sio.points = [];
+        }
+        GLOBAL.sio.points.push(point);
+        if (GLOBAL.sio.points.length > 3) {
+            GLOBAL.sio.points.shift();
+        }
         point.Id = ++GLOBAL.sio.countPoints;
         GLOBAL.sio.sockets.emit("point", point);
     }
@@ -100,24 +127,24 @@ var emitConnect = function (name, type) {
 }
 var startGame = function () {
     if (GLOBAL.sio && GLOBAL.sio.sockets) {
-        GLOBAL.sio.sockets.emit("startGame", 30);
+        GLOBAL.sio.sockets.emit("startGame", 60);
         
         emitScore("all", 0);
         
         startEmitPoints();
         setTimeout(function () {
             stopGame();
-        }, 30 * 1000);
+        }, 60 * 1000);
     }
 }
 
 var stopGame = function () {
     if (GLOBAL.sio && GLOBAL.sio.sockets) {
         stopEmitPoints();
-        GLOBAL.sio.sockets.emit("stopGame", 10);
+        GLOBAL.sio.sockets.emit("stopGame", 20);
         setTimeout(function () {
             startGame();
-        }, 10 * 1000);
+        }, 20 * 1000);
     }
 }
 
