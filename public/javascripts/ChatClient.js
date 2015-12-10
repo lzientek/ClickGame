@@ -4,6 +4,25 @@ var canvas, context, pointTab = [];
 var colorArrayPrimary = ["#2980b9", "#27ae60", "#8e44ad", "#f39c12", "#c0392b", "#d35400"];
 var colorArraySecondary = ["#3498db", "#2ecc71", "#9b59b6", "#f1c40f", "#e74c3c", "#e67e22"];
 var circleSize = 20;
+var isPlaying = false;
+
+function drawString(ctx, text, posX, posY, textColor, font, fontSize) {
+    var lines = text.split("\n");
+    var rotation = 0;
+    if (!font) font = "'serif'";
+    if (!fontSize) fontSize = 16;
+    if (!textColor) textColor = '#000000';
+    ctx.save();
+    ctx.font = fontSize + "px " + font;
+    ctx.fillStyle = textColor;
+    ctx.translate(posX, posY);
+    ctx.rotate(rotation * Math.PI / 180);
+    for (i = 0; i < lines.length; i++) {
+        ctx.fillText(lines[i], 0, i * fontSize);
+    }
+    ctx.restore();
+}
+
 //receive messsage
 socket.on('message', function (message) {
     var result = '<div class="message" ><h4>' + message.Name + '</h4><p>' + message.Text + '</p><p>' + message.PostingDate + '</p></div>';
@@ -22,7 +41,7 @@ socket.on('connectMsg', function (value) {
 });
 
 function displayWinner() {
-    var winnerName = "",winnerScore =0;
+    var winnerName = "", winnerScore = 0;
     $(".score").each(function (parameters) {
         
         var score = parseInt($(this).text());
@@ -34,36 +53,46 @@ function displayWinner() {
     var textToDisplay = "Wait...";
     if (winnerName == $("#HiddenName").val()) {
         //display you win
-        textToDisplay = "You win! ( " + winnerScore + " points)";
-    } else if(winnerName != "") {
-         textToDisplay = winnerName+" win! ( " + winnerScore + " points)";
+        textToDisplay = "You win!\n ( " + winnerScore + " points)";
+    } else if (winnerName != "") {
+        textToDisplay = winnerName + " win!\n ( " + winnerScore + " points)";
     }
-    context.fillStyle = '#2980b9';
-    context.font = 'bold 40px lato';
-    context.textBaseline = 'bottom';
-    context.fillText(textToDisplay, 100, 100);
+    drawString(context, textToDisplay, 50, 100, '#2980b9', 'lato', 40);
 }
 
 
 var timerInterval;
 //start
 socket.on('startGame', function (value) {
+    isPlaying = true;
     context.clearRect(0, 0, canvas.width, canvas.height);
     clearInterval(timerInterval);
     timerInterval = setInterval(function () {
         value--;
-        $("#timerText").text(value + " seconde restant! Cliquez!!!");
+        if (value <= 10) {
+            
+            $("#timerText").html('<span class="red-color">' + value + "</span>  secondes restantes! Cliquez!!!");
+        } else {
+            $("#timerText").html('<span class="">' + value + "</span> secondes restantes! Cliquez!!!");
+        }
     }, 1000);
     
 });
 
 //stop
 socket.on('stopGame', function (value) {
+    isPlaying = false;
+    context.clearRect(0, 0, canvas.width, canvas.height);
     clearInterval(timerInterval);
     displayWinner();
     timerInterval = setInterval(function () {
         value--;
-        $("#timerText").text(value + " secondes avant la prochaine partie!");
+        if (value <= 5) {
+            
+            $("#timerText").html('<span class="red-color">' + value + "</span> secondes avant la prochaine partie!");
+        } else {
+            $("#timerText").html('<span class="">' + value + "</span> secondes avant la prochaine partie!");
+        }
     }, 1000);
 });
 
@@ -107,6 +136,10 @@ socket.on('point', function (point) {
     var flowDir = +1;
     var i = 1;
     var myAnim = setInterval(function () {
+        if (!isPlaying) {
+            clearInterval(myAnim);
+            return;
+        }
         clearCircle(point);
         displayCircle(point, rand);
         context.beginPath();
@@ -165,6 +198,10 @@ $(function () {
     canvas = document.getElementById("game");
     context = canvas.getContext('2d');
     canvas.addEventListener('click', function (evt) {
+        if (!isPlaying) {
+            return;
+        }
+        
         $("#game").removeClass("red-border");
         $("#game").removeClass("green-border");
         $("#score-board").removeClass("green-color");
