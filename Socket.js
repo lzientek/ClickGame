@@ -5,7 +5,7 @@
             GLOBAL.sio.messages = [];
         }
         GLOBAL.sio.messages.push(message);
-        if (GLOBAL.sio.messages.length > 4) {
+        if (GLOBAL.sio.messages.length > 7) {
             GLOBAL.sio.messages.shift();
         }
     }
@@ -73,7 +73,7 @@ var emitPoint = function (point) {
             GLOBAL.sio.points = [];
         }
         GLOBAL.sio.points.push(point);
-        if (GLOBAL.sio.points.length > 3) {
+        if (GLOBAL.sio.points.length > 5) {
             GLOBAL.sio.points.shift();
         }
         point.Id = ++GLOBAL.sio.countPoints;
